@@ -198,7 +198,7 @@ class SMSApiClient(object):
         }
 
         # compute path
-        path = "sms"
+        path = "sms?method=POST"
 
         response = {}
         try:
