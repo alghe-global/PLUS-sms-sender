@@ -27,8 +27,8 @@ NAME = "SMSSender"
 setup(
     name=NAME,
     version=__version__,
-    package_dir={'sms_sender': 'sms_sender'},
-    packages=find_packages(),
+    package_dir={'': 'src',},
+    packages=['sms_sender'],
     scripts=['bin/run.py'],
 
     # Generează script-urile și pentru hârburile de Windouze.
@@ -38,9 +38,7 @@ setup(
         ]
     },
 
-    # Project uses reStructuredText, so ensure that the docutils get
-    # installed or upgraded on the target machine
-    install_requires=['docutils>=0.3'],
+    install_requires=[''],
 
     package_data={
         # Include scripts.

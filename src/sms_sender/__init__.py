@@ -13,6 +13,9 @@
 # Pentru informatii, contactati: contact@ro.plus
 # https://www.ro.plus/contact
 #
+# Implementeaza:
+# http://api.i-digital-m.com/v1/documentation
+#
 
 __version__ = "0.0.1"
 __author__ = "Alexandru Gheorghe <irlanda@ro.plus>"

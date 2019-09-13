@@ -21,10 +21,10 @@ import argparse
 
 import json
 
-from lib.api import SMSApiClient
+from sms_sender.api import SMSApiClient
 
-from lib.logger import get_logger
-from lib.util import _return_csv_as_dict, build_list_of_numbers
+from sms_sender.logger import get_logger
+from sms_sender.util import _return_csv_as_dict, build_list_of_numbers
 
 __version__ = "0.0.2"
 
