@@ -10,9 +10,7 @@ Executabilul `.exe` se deschide pentru ca instalarea să aibă loc.
 
 Instalarea se face prin executarea comenzii următoare:
 
-  .. ::
-
-       sudo setup.py install
+    sudo setup.py install
 
 #### Cum se folosește?
 
@@ -20,9 +18,7 @@ Se execută din linia de comandă.
 
 Pentru a afla opțiunile:
 
-    .. ::
-
-	    sms_sender_nb.py -h
+    sms_sender_nb.py -h
 
 Opțiunile importante ar fi:
 
