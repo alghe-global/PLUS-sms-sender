@@ -70,12 +70,12 @@ def main():
         _log.info("Salvez datele.")
         with open("sms_log_{}".format(time.strftime("%Y_%m_%d-%H_%M_%S")), "ab") \
                 as fobj:
-            fobj.write(json.dumps(ans))
+            fobj.write(json.dumps(ans, indent=4))
         sys.exit(1)
     elif len(ans) != len(numbers):
         _log.warn("Nu toate numerele au primit un SMS "
                   "(trimise: {}, numere: {}).".format(len(ans), len(numbers)))
-        sys.exit(1)
+
     _log.info("Toate numerele au primit un SMS.")
     _log.debug("\n----------------------------\n")
     _log.debug(json.dumps(ans, indent=4))
@@ -84,6 +84,6 @@ def main():
     _log.info("Salvez datele.")
     with open("sms_log_{}".format(time.strftime("%Y_%m_%d-%H_%M_%S")), "ab") \
             as fobj:
-        fobj.write(json.dumps(ans))
+        fobj.write(json.dumps(ans, indent=4))
     _log.debug("Gata. Totul s-a terminat cu succes.")
     sys.exit(0)

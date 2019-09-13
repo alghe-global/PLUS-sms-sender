@@ -203,10 +203,12 @@ class SMSApiClient(object):
         response = {}
         try:
             req = self._make_request(request=path, data=d)
-            if not isinstance(req, dict):
+            if (req and isinstance(req.status_code, int)
+                    and not req.status_code / 100 == 2
+                    or not isinstance(req, requests.models.Response)):
                 _log.warn("REQ. EȘUAT: {}".format(req))
             else:
-                response.update(json.loads(req))
+                response.update(json.loads(req.text))
         except Exception as e:
             _log.error("Cererea făcută la API a eșuat "
                        "(path: \"{}\")".format(path), exc_info=True)
