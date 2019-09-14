@@ -27,8 +27,8 @@ NAME = "SMSSender"
 setup(
     name=NAME,
     version=__version__,
-    package_dir={'': 'src',},
     packages=['sms_sender'],
+    package_dir={'': 'src'},
     scripts=['bin/run.py'],
 
     # Generează script-urile și pentru hârburile de Windouze.
@@ -38,11 +38,12 @@ setup(
         ]
     },
 
-    install_requires=[''],
+    install_requires=['docutils>=0.3'],
 
-    package_data={
-        # Include scripts.
-        '': ['run.py', 'README.md', 'CHANGELOG.md']
+    package_data={'sms_sender': [
+        'config/mesaj_sms.txt',
+        '*.md',
+        'LICENSE'],
     },
 
     # metadata to display on PyPI

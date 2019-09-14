@@ -14,7 +14,7 @@
 # https://www.ro.plus/contact
 #
 # Implementeaza:
-# http://api.i-digital-m.com/v1/documentation
+# http://api.i-digital-m.com/v2/documentation
 #
 
 import getpass
@@ -76,3 +76,32 @@ def get_user(user=None):
     if not user:
         user = getpass._raw_input()
     return user
+
+
+def get_message(file, fix_path=False):
+    """
+    Dat fiind obiectul **file**, încearcă să returneze conținutul.
+    Dacă fișierul nu există, returnează None.
+
+    :param file: fișierul cu pricina
+    :type file: str
+    :returns: conținutul fișierului \n splitted
+    :rtype: str sau None (dacă fișierul nu există)
+    """
+    if fix_path:
+        fpath = "/".join(["/".join(__file__.split("/")[:-1]),
+                         file])
+    else:
+        fpath = file
+
+    try:
+        return "".join(open(fpath, "rb").readlines())
+    except IOError as e:
+        if e.message:
+            if "no such file" in e.message.lower():
+                return None
+        elif len(e.args) > 1 and isinstance(e.args[1], str):
+            if "no such file" in e.args[1].lower():
+                return None
+        else:
+            raise

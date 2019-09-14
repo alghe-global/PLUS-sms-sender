@@ -24,11 +24,15 @@ import json
 from sms_sender.api import SMSApiClient
 
 from sms_sender.logger import get_logger
-from sms_sender.util import _return_csv_as_dict, build_list_of_numbers
+from sms_sender.util import (_return_csv_as_dict, build_list_of_numbers,
+                             get_message)
 
 __version__ = "0.0.2"
 
+
 _log = get_logger(__name__)
+
+_DEFAULT_SMS_FILE = "config/mesaj_sms.txt"
 
 
 def main():
@@ -43,13 +47,20 @@ def main():
                              "NOTĂ: trebuie să aibă una din coloanele: "
                              "mobile_number, phone_number sau "
                              "work_phone_number")
-    parser.add_argument("-m", "--mesaj", dest="message", type=str,
-                        required=True,
-                        help="mesajul care să fie trimis")
+    parser.add_argument("-s", "--sms", dest="sms", type=str,
+                        required=False,
+                        help="mesajul care să fie trimis, specificat în linia "
+                             "de comandă.\nNOTĂ: dacă este setat, programul NU "
+                             "va citi mesajul din fișier!")
+    parser.add_argument("-m", "--sms-file", dest="sms_file", type=str,
+                        required=False, default=None,
+                        help="fișierul care să conțină mesajul SMS. "
+                             "dacă nu este specificat, atunci fișierul \"{}\" "
+                             "va fi folosit".format(_DEFAULT_SMS_FILE))
     parser.add_argument("-e", "--emitator", dest="sender", type=str,
                         required=True,
-                        help="numarul de la care sa se "
-                             "trimita SMS")
+                        help="numarul de la care să se "
+                             "trimită SMS")
     parser.add_argument("-c", "--country-code", dest="country_code", type=str,
                         required=True,
                         help="țara asumată atunci când numerele de telefon "
@@ -58,11 +69,37 @@ def main():
                         version='%(prog)s {}'.format(__version__))
     args = parser.parse_args()
 
+    if args.sms:
+        message = args.sms
+    else:
+        if args.sms_file:
+            message = get_message(args.sms_file)
+        else:
+            message = get_message(_DEFAULT_SMS_FILE, fix_path=True)
+
+    if not message and not args.sms:
+        _log.fatal("Nu am un mesaj SMS cu care să pornesc. "
+                   "Poți crea fișierul sau să-l specifici din linia de "
+                   "comandă. Apelează script-ul cu argumentul -h sau --help "
+                   "pentru mai multe informații.")
+        sys.exit(1)
+
+    if not isinstance(message, str) and hasattr(message, '__iter__'):
+        # este o iterabila: incarca drept un singur string
+        message = "".join(message)
+
+    message = message.lstrip("\n").rstrip("\n")
+    _log.debug("Am încărcat SMS-ul ce trebuie trimis. Acesta este:\n"
+               "--- ÎNCEPE TEXT SMS ---\n\n"
+               "{}\n\n"
+               "--- ÎNCHEIE TEXT SMS ---".format(message))
+
     data = _return_csv_as_dict(args.file)
     numbers = build_list_of_numbers(data)
 
     client = SMSApiClient()
-    ans = client.bulk_send_sms(sender=args.sender, message=args.message,
+
+    ans = client.bulk_send_sms(sender=args.sender, message=message,
                                recipients=numbers,
                                country_code=args.country_code)
     if ans == [{}]:
@@ -76,7 +113,8 @@ def main():
         _log.warn("Nu toate numerele au primit un SMS "
                   "(trimise: {}, numere: {}).".format(len(ans), len(numbers)))
 
-    _log.info("Toate numerele au primit un SMS.")
+    _log.info("Am terminat procedura de trimitere. "
+              "Salvez în DEBUG mode răspunsurile primite de la server.")
     _log.debug("\n----------------------------\n")
     _log.debug(json.dumps(ans, indent=4))
     _log.debug("\n----------------------------\n")

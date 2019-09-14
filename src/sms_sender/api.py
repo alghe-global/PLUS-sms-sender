@@ -14,7 +14,7 @@
 # https://www.ro.plus/contact
 #
 # Implementeaza:
-# http://api.i-digital-m.com/v1/documentation
+# http://api.i-digital-m.com/v2/documentation
 #
 
 import sys
@@ -38,7 +38,7 @@ _log = get_logger(__name__)
 class SMSApiClient(object):
     """
     Clasă ce implementează client-ul API pentru SMS.
-    Mai multe informații `aici <_http://api.i-digital-m.com/v1/documentation>`_.
+    Mai multe informații `aici <_http://api.i-digital-m.com/v2/documentation>`_.
 
     * trimitere SMS
     * trimitere SMS Bulk

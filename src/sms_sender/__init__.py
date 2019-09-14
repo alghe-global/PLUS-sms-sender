@@ -14,7 +14,7 @@
 # https://www.ro.plus/contact
 #
 # Implementeaza:
-# http://api.i-digital-m.com/v1/documentation
+# http://api.i-digital-m.com/v2/documentation
 #
 
 __version__ = "0.0.1"
