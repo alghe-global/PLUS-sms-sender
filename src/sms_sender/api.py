@@ -203,7 +203,7 @@ class SMSApiClient(object):
         response = {}
         try:
             req = self._make_request(request=path, data=d)
-            if (req and isinstance(req.status_code, int)
+            if (req is not None and isinstance(req.status_code, int)
                     and not req.status_code / 100 == 2
                     or not isinstance(req, requests.models.Response)):
                 _log.warn("REQ. EȘUAT: {}".format(req))
