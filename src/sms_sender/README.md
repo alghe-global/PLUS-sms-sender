@@ -26,6 +26,7 @@ Opțiunile importante ar fi:
 
 * -f -- este fișierul CSV exportat din NB
 
+* -e -- este numărul care va fi afișat la destinatar ca fiind emițătorul (acolo va da reply)
 
 #### Logare
 
