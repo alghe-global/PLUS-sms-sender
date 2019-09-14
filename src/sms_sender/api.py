@@ -207,7 +207,7 @@ class SMSApiClient(object):
                     and not req.status_code / 100 == 2
                     or not isinstance(req, requests.models.Response)):
                 _log.warn("REQ. EȘUAT: {}".format(req))
-            else:
+            if hasattr(req, 'text') and req.text is not None:
                 response.update(json.loads(req.text))
         except Exception as e:
             _log.error("Cererea făcută la API a eșuat "
