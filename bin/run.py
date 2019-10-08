@@ -34,6 +34,9 @@ _log = get_logger(__name__)
 
 _DEFAULT_SMS_FILE = "config/mesaj_sms.txt"
 
+MAX_LENGTH_SENDER_DIGIT = 25
+MAX_LENGTH_SENDER_ALPHA = 11
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -83,6 +86,22 @@ def main():
                    "comandă. Apelează script-ul cu argumentul -h sau --help "
                    "pentru mai multe informații.")
         sys.exit(1)
+
+    if not args.sender:
+        _log.fatal("Un emițător trebuie menționat. Nu pot continua altfel.")
+        sys.exit(1)
+    elif args.sender.replace(" ", "").isalpha() and \
+            len(args.sender) > MAX_LENGTH_SENDER_ALPHA:
+       _log.fatal("Numele folosit pentru emițător este prea lung ({}). "
+                  "Lungimea maximă permisă este de: {}.\n"
+                  "Folosește un nume de o mărime mai mică.".format(len(args.sender), MAX_LENGTH_SENDER_ALPHA))
+       sys.exit(1)
+    elif args.sender.replace("+", "").replace(" ", "").isdigit() and \
+            len(args.sender) > MAX_LENGTH_SENDER_DIGIT:
+       _log.fatal("Numărul folosit pentru emițător este prea lung ({}). "
+                  "Lungimea maximă permisă este de: {}.\n"
+                  "Folosește un număr de o mărime mai mică.".format(len(args.sender), MAX_LENGTH_SENDER_DIGIT))
+       sys.exit(1)
 
     if not isinstance(message, str) and hasattr(message, '__iter__'):
         # este o iterabila: incarca drept un singur string
