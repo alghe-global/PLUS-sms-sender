@@ -222,7 +222,7 @@ class SMSApiClient(object):
                       "{} (status code: {})".format(d, response.get("status")))
             return response
 
-    def bulk_send_sms(self, sender, recipients, message, country_code, dlr=0):
+    def bulk_send_sms(self, sender, recipients, message, country_code, dlr=1):
         """
         Ca și :func:`send_sms`, numai că ia argumentul **recipient** drept listă
         și în caz că nu e o listă (ci e `str`, de exemplu), face conversie.

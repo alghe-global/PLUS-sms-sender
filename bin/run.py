@@ -101,7 +101,8 @@ def main():
 
     ans = client.bulk_send_sms(sender=args.sender, message=message,
                                recipients=numbers,
-                               country_code=args.country_code)
+                               country_code=args.country_code,
+                               dlr=1)
     if ans == [{}]:
         _log.warn("A intervenit o eroare.")
         _log.info("Salvez datele.")
