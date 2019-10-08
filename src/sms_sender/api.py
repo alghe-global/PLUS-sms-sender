@@ -151,7 +151,7 @@ class SMSApiClient(object):
                        exc_info=True)
             raise SMSApiException(e)
 
-    def send_sms(self, sender, recipient, message, dlr=0, max_len=250):
+    def send_sms(self, sender, recipient, message, dlr=0, max_len=1000):
         """
         Trimite un SMS de la numărul **sender**, către recipientul **recipient**
         cu mesajul **message**.
@@ -166,7 +166,7 @@ class SMSApiClient(object):
                     altfel dacă 0 (implicit) un delivery receipt nu va fi primit
         :type dlr: int
         :param max_len: mărimea maximă a mesajului care poate fi folosită
-        :type max_len: int (default 250)
+        :type max_len: int
         :returns: ID al SMS-ului care poate fi folosit pentru a îl identifica
                   în alte cereri către API (request-uri)
         :rtype: messageId
