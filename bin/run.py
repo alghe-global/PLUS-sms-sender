@@ -36,6 +36,7 @@ _DEFAULT_SMS_FILE = "config/mesaj_sms.txt"
 
 MAX_LENGTH_SENDER_DIGIT = 25
 MAX_LENGTH_SENDER_ALPHA = 11
+MAX_LENGTH_SMS_BODY = 160
 
 
 def main():
@@ -60,6 +61,14 @@ def main():
                         help="fișierul care să conțină mesajul SMS. "
                              "dacă nu este specificat, atunci fișierul \"{}\" "
                              "va fi folosit".format(_DEFAULT_SMS_FILE))
+    parser.add_argument("-l", "--lungime", dest="sms_length", action="store_true",
+                        required=False, default=False,
+                        help="când este specificată această opțiune, "
+                             "SMS-ul va fi partajat în mai multe mesaje "
+                             "dacă mărimea mesajului întreg depașește {} "
+                             "caractere în total; implicit, nu se vor trimite "
+                             "SMS-urile, dacă mesajul depășește lungimea "
+                             "permisibilă".format(MAX_LENGTH_SMS_BODY))
     parser.add_argument("-e", "--emitator", dest="sender", type=str,
                         required=True,
                         help="numarul de la care să se "
@@ -86,6 +95,24 @@ def main():
                    "comandă. Apelează script-ul cu argumentul -h sau --help "
                    "pentru mai multe informații.")
         sys.exit(1)
+
+    if not args.sms_length and len(message) > MAX_LENGTH_SMS_BODY:
+        _log.fatal("Lungimea totală a mesajului SMS ({}) depășește pe cea permisibilă ({}).\n"
+                   "Poți dezactiva această protecție prin a restarta aplicația introducând și "
+                   "opțiunea „-l” („--lungime”) pentru a partaja mesajul în mai multe bucăți "
+                   "și a forța trimiterea lui (ATENȚIE: rețelele de telefonie s-ar putea să "
+                   "blocheze mesajele dacă acestea sunt multe la număr și sunt trimise către "
+                   "multe numere de telefon! Folosiți cu grijă).".format(len(message),
+                                                                         MAX_LENGTH_SMS_BODY)
+                   )
+        sys.exit(1)
+    elif args.sms_length and len(message) > MAX_LENGTH_SMS_BODY:
+        _log.debug("Lungimea totală a mesajului SMS ({}) depășește pe cea permisibilă ({}), "
+                   "însă mi s-a comunicat să partajez mesajul. Continui!\n"
+                   "ATENȚIE: mesajele separate vor costa fiecare cât un SMS individual! Prin "
+                   "urmare, veți suporta consecințele costurilor!".format(len(message),
+                                                                          MAX_LENGTH_SMS_BODY)
+                   )
 
     if not args.sender:
         _log.fatal("Un emițător trebuie menționat. Nu pot continua altfel.")
