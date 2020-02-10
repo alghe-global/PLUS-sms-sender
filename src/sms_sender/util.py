@@ -18,6 +18,7 @@
 #
 
 import getpass
+import errno
 
 from csv import DictReader
 
@@ -97,9 +98,9 @@ def get_message(file, fix_path=False):
     try:
         return "".join(open(fpath, "rb").readlines())
     except IOError as e:
-        if e.message:
-            if "no such file" in e.message.lower():
-                return None
+        #MI: Any reason this wasn't using errno?
+        if e.errno == errno.ENOENT:
+            return None
         elif len(e.args) > 1 and isinstance(e.args[1], str):
             if "no such file" in e.args[1].lower():
                 return None
