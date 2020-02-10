@@ -98,7 +98,6 @@ def get_message(file, fix_path=False):
     try:
         return "".join(open(fpath, "rb").readlines())
     except IOError as e:
-        #MI: Any reason this wasn't using errno?
         if e.errno == errno.ENOENT:
             return None
         elif len(e.args) > 1 and isinstance(e.args[1], str):
